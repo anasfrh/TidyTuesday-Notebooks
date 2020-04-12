@@ -1,0 +1,71 @@
+---
+title: "Tidy Tuesday 2020-02-11, Hotels Bookings"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+
+hotels <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-11/hotels.csv')
+```
+
+Let's have a look at the data 
+
+```{r}
+hotels %>% head()
+```
+
+How often do people book weekend nights?
+
+```{r}
+hotels %>% group_by(stays_in_weekend_nights) %>% count() %>% ggplot(aes(stays_in_weekend_nights,n)) + geom_col()
+```
+How often do people book week nights?
+
+```{r}
+hotels %>% group_by(stays_in_week_nights) %>% count() %>% ggplot(aes(stays_in_week_nights,n)) + geom_col()  
+```
+
+
+What hotel types are more popular? 
+
+```{r}
+hotels %>% group_by(hotel) %>% count() %>% ggplot(aes(hotel,n)) + geom_col()
+```
+What's the trend like over the years? 
+
+```{r}
+hotels %>% group_by(arrival_date_year) %>% count() %>% ggplot(aes(arrival_date_year, n)) + geom_col()
+```
+
+
+What's the trend like across months?
+
+```{r}
+hotels %>% group_by(arrival_date_month) %>% count() %>% ggplot(aes(arrival_date_month,n)) + geom_col()
+```
+
+What are the top 10 countries of origin for visitors? 
+
+```{r}
+hotels %>% group_by(country) %>% tally(sort=TRUE) %>% top_n(10) %>% mutate(country=fct_reorder(country,n)) %>% ggplot(aes(country,n)) + geom_col() + coord_flip()
+```
+
+What distribution channels 
+
+```{r}
+hotels %>% 
+  group_by(distribution_channel) %>% 
+  tally() %>%
+  mutate(distribution_channel=fct_reorder(distribution_channel,n)) %>%
+  ggplot(aes(distribution_channel,n)) +
+  geom_col() +
+  coord_flip()
+           
+```
+
+
+
+
+
+
+
